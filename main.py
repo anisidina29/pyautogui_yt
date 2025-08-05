@@ -116,21 +116,55 @@ def open_video(link):
     print(f"[INFO] Playing video: {link}")
 
 # Human-like action simulation
-def human_like_action():
-    action = random.choice(["move_mouse", "scroll", "keyboard"])
-    if action == "move_mouse":
-        x = random.randint(500, 1000)
-        y = random.randint(200, 600)
-        pyautogui.moveTo(x, y, duration=0.5)
-        print("[ACTION] Mouse moved")
-    elif action == "scroll":
-        pyautogui.scroll(random.choice([200, -200]))
-        print("[ACTION] Page scrolled")
-    elif action == "keyboard":
-        key_action = random.choice(["left", "right"])
-        pyautogui.press(key_action)
-        print(f"[ACTION] Pressed {key_action}")
+import pyautogui
+import random
+import time
 
+def human_like_action():
+    actions = (
+        ["move_mouse"] * 5 +  # 50%
+        ["idle"] * 2 +        # 20%
+        ["backward", "forward", "volume_up", "volume_down",
+         "mute", "subtitle", "pause_play", "speed_up", "speed_down"]  # 30%
+    )
+
+    action = random.choice(actions)
+
+    if action == "backward":
+        pyautogui.press('j')  # Rewind 10s
+        print("[ACTION] Rewind 10s")
+    elif action == "forward":
+        pyautogui.press('l')  # Forward 10s
+        print("[ACTION] Forward 10s")
+    elif action == "volume_up":
+        pyautogui.press('up')  # Volume up
+        print("[ACTION] Volume up")
+    elif action == "volume_down":
+        pyautogui.press('down')  # Volume down
+        print("[ACTION] Volume down")
+    elif action == "mute":
+        pyautogui.press('m')  # Mute/Unmute
+        print("[ACTION] Mute/Unmute")
+    elif action == "subtitle":
+        pyautogui.press('c')  # Toggle subtitles
+        print("[ACTION] Toggle subtitles")
+    elif action == "pause_play":
+        pyautogui.press('k')  # Play/Pause
+        print("[ACTION] Play/Pause video")
+    elif action == "speed_up":
+        pyautogui.hotkey('shift', '>')  # Increase speed
+        print("[ACTION] Speed up")
+    elif action == "speed_down":
+        pyautogui.hotkey('shift', '<')  # Decrease speed
+        print("[ACTION] Speed down")
+    elif action == "move_mouse":
+        x = random.randint(200, 1200)
+        y = random.randint(200, 700)
+        pyautogui.moveTo(x, y, duration=0.5)
+        print(f"[ACTION] Mouse moved to ({x},{y})")
+    elif action == "idle":
+        print("[ACTION] Idle (do nothing)")
+        
 # Start watching videos
 print("Starting video watching automation...")
 
