@@ -108,13 +108,20 @@ current_index = 0
 
 # Function to open a video
 def open_video(link):
-    subprocess.Popen(f'{chrome_path} --start-fullscreen {link}')
-    time.sleep(8)
+    # Mở link trong Chrome fullscreen
+    subprocess.Popen(f'{chrome_path} --new-tab {link}')
+    time.sleep(8)  # Chờ Chrome load trang
+
+    # Đóng tab cũ
+    pyautogui.hotkey('ctrl', 'w')
+    time.sleep(1)
+
+    # Di chuyển chuột vào giữa màn hình
     screen_width, screen_height = pyautogui.size()
     pyautogui.moveTo(screen_width // 2, screen_height // 2, duration=0.5)
-    pyautogui.click()
+    
     print(f"[INFO] Playing video: {link}")
-
+    
 # Human-like action simulation
 import pyautogui
 import random
@@ -125,37 +132,38 @@ def human_like_action():
         ["move_mouse"] * 5 +  # 50%
         ["idle"] * 2 +        # 20%
         ["backward", "forward", "volume_up", "volume_down",
-         "mute", "subtitle", "pause_play", "speed_up", "speed_down"]  # 30%
+         "mute", "subtitle", "pause_play", "speed_up", "speed_down"] +  # 30%
+        ["like"]              # ~5%
     )
 
     action = random.choice(actions)
 
     if action == "backward":
-        pyautogui.press('j')  # Rewind 10s
+        pyautogui.press('j')
         print("[ACTION] Rewind 10s")
     elif action == "forward":
-        pyautogui.press('l')  # Forward 10s
+        pyautogui.press('l')
         print("[ACTION] Forward 10s")
     elif action == "volume_up":
-        pyautogui.press('up')  # Volume up
+        pyautogui.press('up')
         print("[ACTION] Volume up")
     elif action == "volume_down":
-        pyautogui.press('down')  # Volume down
+        pyautogui.press('down')
         print("[ACTION] Volume down")
     elif action == "mute":
-        pyautogui.press('m')  # Mute/Unmute
+        pyautogui.press('m')
         print("[ACTION] Mute/Unmute")
     elif action == "subtitle":
-        pyautogui.press('c')  # Toggle subtitles
+        pyautogui.press('c')
         print("[ACTION] Toggle subtitles")
     elif action == "pause_play":
-        pyautogui.press('k')  # Play/Pause
+        pyautogui.press('k')
         print("[ACTION] Play/Pause video")
     elif action == "speed_up":
-        pyautogui.hotkey('shift', '>')  # Increase speed
+        pyautogui.hotkey('shift', '>')
         print("[ACTION] Speed up")
     elif action == "speed_down":
-        pyautogui.hotkey('shift', '<')  # Decrease speed
+        pyautogui.hotkey('shift', '<')
         print("[ACTION] Speed down")
     elif action == "move_mouse":
         x = random.randint(200, 1200)
@@ -164,7 +172,19 @@ def human_like_action():
         print(f"[ACTION] Mouse moved to ({x},{y})")
     elif action == "idle":
         print("[ACTION] Idle (do nothing)")
-        
+    elif action == "like":
+        print("[ACTION] Trying to click Like button...")
+        try:
+            like_button = pyautogui.locateOnScreen('like_button.png', confidence=0.8)
+            if like_button:
+                center = pyautogui.center(like_button)
+                pyautogui.click(center)
+                print("[ACTION] Clicked Like button")
+            else:
+                print("[ACTION] Like button not found on screen")
+        except Exception as e:
+            print(f"[ERROR] Failed to click Like button: {e}")
+            
 # Start watching videos
 print("Starting video watching automation...")
 
