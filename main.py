@@ -107,19 +107,23 @@ video_links = get_video_links()
 current_index = 0
 
 # Function to open a video
+opened_tabs = 0  # Biến toàn cục theo dõi số tab
+
 def open_video(link):
-    # Mở link trong Chrome fullscreen
+    global opened_tabs
     subprocess.Popen(f'{chrome_path} --new-tab {link}')
-    time.sleep(8)  # Chờ Chrome load trang
+    opened_tabs += 1
+    time.sleep(8)  # Đợi trang tải
 
-    # Đóng tab cũ
-    pyautogui.hotkey('ctrl', 'w')
-    time.sleep(1)
+    # Nếu có hơn 4 tab thì đóng tab cũ
+    if opened_tabs > 4:
+        pyautogui.hotkey('ctrl', 'w')
+        opened_tabs -= 1
+        print("[INFO] Closed old tab because more than 4 tabs were open.")
 
-    # Di chuyển chuột vào giữa màn hình
+    # Di chuyển chuột ra giữa màn hình
     screen_width, screen_height = pyautogui.size()
     pyautogui.moveTo(screen_width // 2, screen_height // 2, duration=0.5)
-    
     print(f"[INFO] Playing video: {link}")
     
 # Human-like action simulation
